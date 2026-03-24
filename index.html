@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sambro Nutri — Nutrition & Bien-être</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- AUTH OVERLAY -->
+<div id="auth-overlay" class="auth-overlay">
+  <div class="auth-bg"></div>
+  <div class="auth-card">
+    <div class="auth-logo">
+      <span class="logo-leaf">🌿</span>
+      <h1>Sambro <em>Nutri</em></h1>
+      <p>Votre compagnon nutrition & bien-être</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="showAuthTab('login')">Connexion</button>
+      <button class="auth-tab" onclick="showAuthTab('register')">Inscription</button>
+    </div>
+
+    <div id="login-form" class="auth-form">
+      <input type="email" id="login-email" placeholder="Adresse email" class="auth-input"/>
+      <input type="password" id="login-password" placeholder="Mot de passe" class="auth-input"/>
+      <button class="auth-btn" onclick="loginUser()">Se connecter</button>
+      <div class="auth-divider"><span>ou</span></div>
+      <button class="auth-btn-google" onclick="loginGoogle()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continuer avec Google
+      </button>
+    </div>
+
+    <div id="register-form" class="auth-form hidden">
+      <input type="text" id="reg-name" placeholder="Votre prénom" class="auth-input"/>
+      <input type="email" id="reg-email" placeholder="Adresse email" class="auth-input"/>
+      <input type="password" id="reg-password" placeholder="Mot de passe (6+ caractères)" class="auth-input"/>
+      <div class="profile-row">
+        <input type="number" id="reg-age" placeholder="Âge" class="auth-input half"/>
+        <select id="reg-gender" class="auth-input half">
+          <option value="">Genre</option>
+          <option value="homme">Homme</option>
+          <option value="femme">Femme</option>
+        </select>
+      </div>
+      <div class="profile-row">
+        <input type="number" id="reg-weight" placeholder="Poids (kg)" class="auth-input half"/>
+        <input type="number" id="reg-height" placeholder="Taille (cm)" class="auth-input half"/>
+      </div>
+      <button class="auth-btn" onclick="registerUser()">Créer mon compte</button>
+    </div>
+
+    <div id="auth-error" class="auth-error hidden"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <span>🌿</span>
+      <span>Sambro <em>Nutri</em></span>
+    </div>
+    <div class="sidebar-nav">
+      <button class="nav-item active" onclick="showPage('dashboard')" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Tableau de bord
+      </button>
+      <button class="nav-item" onclick="showPage('calories')" data-page="calories">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
+        Calories
+      </button>
+      <button class="nav-item" onclick="showPage('recipes')" data-page="recipes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Recettes
+      </button>
+      <button class="nav-item" onclick="showPage('journal')" data-page="journal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Journal
+      </button>
+      <button class="nav-item" onclick="showPage('weight')" data-page="weight">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Poids
+      </button>
+      <button class="nav-item" onclick="showPage('sport')" data-page="sport">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="5" r="2"/><path d="M12 7v8M8 9l4-2 4 2M9 17l3-2 3 2"/></svg>
+        Sport
+      </button>
+      <button class="nav-item" onclick="showPage('profile')" data-page="profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profil
+      </button>
+    </div>
+    <button class="logout-btn" onclick="logoutUser()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Déconnexion
+    </button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <header class="top-header">
+      <div class="header-greeting">
+        <h2 id="greeting-text">Bonjour</h2>
+        <span id="today-date"></span>
+      </div>
+      <div class="header-user">
+        <div class="user-avatar" id="user-avatar">S</div>
+      </div>
+    </header>
+
+    <!-- PAGES -->
+
+    <!-- DASHBOARD -->
+    <section id="page-dashboard" class="page active">
+      <div class="page-title">
+        <h2>Tableau de bord</h2>
+        <p>Vue d'ensemble de votre journée</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card accent">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-info">
+            <span class="stat-value" id="dash-cal-consumed">0</span>
+            <span class="stat-label">kcal consommées</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-info">
+            <span class="stat-value" id="dash-cal-goal">2000</span>
+            <span class="stat-label">kcal objectif</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💧</div>
+          <div class="stat-info">
+            <span class="stat-value" id="dash-cal-remaining">2000</span>
+            <span class="stat-label">kcal restantes</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚖️</div>
+          <div class="stat-info">
+            <span class="stat-value" id="dash-weight">–</span>
+            <span class="stat-label">kg actuels</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-label">
+          <span>Progression calorique du jour</span>
+          <span id="dash-progress-pct">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="dash-progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="dash-card">
+          <h3>Repas du jour</h3>
+          <div id="dash-meals-list" class="dash-meals">
+            <p class="empty-state">Aucun repas enregistré aujourd'hui.</p>
+          </div>
+          <button class="card-btn" onclick="showPage('journal')">Ajouter un repas →</button>
+        </div>
+        <div class="dash-card">
+          <h3>Conseil du jour</h3>
+          <div class="tip-card">
+            <span class="tip-icon">✨</span>
+            <p id="daily-tip">Chargement du conseil...</p>
+          </div>
+          <h3 style="margin-top:1.5rem;">Sport suggéré</h3>
+          <div id="dash-sport-tip" class="sport-tip-mini"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALORIES -->
+    <section id="page-calories" class="page">
+      <div class="page-title">
+        <h2>Calculateur de Calories</h2>
+        <p>Estimez les calories de n'importe quel repas</p>
+      </div>
+      <div class="card">
+        <div class="input-group">
+          <label>Décrivez votre repas</label>
+          <textarea id="cal-input" placeholder="Ex: 150g de poulet grillé, 200g de riz basmati, salade verte..." rows="4"></textarea>
+        </div>
+        <button class="primary-btn" onclick="estimateCalories()">
+          <span>Analyser les calories</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div id="cal-result" class="result-card hidden">
+        <div class="result-header">
+          <h3>Résultat d'analyse</h3>
+          <span class="result-badge" id="cal-total-badge">0 kcal</span>
+        </div>
+        <div id="cal-breakdown" class="cal-breakdown"></div>
+        <div class="macro-grid" id="cal-macros"></div>
+        <button class="secondary-btn" onclick="addMealToJournal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Ajouter au journal
+        </button>
+      </div>
+      <div id="cal-loading" class="loading-state hidden">
+        <div class="spinner"></div>
+        <p>Analyse en cours...</p>
+      </div>
+    </section>
+
+    <!-- RECIPES -->
+    <section id="page-recipes" class="page">
+      <div class="page-title">
+        <h2>Générateur de Recettes</h2>
+        <p>Entrez vos ingrédients, obtenez des idées de repas</p>
+      </div>
+      <div class="card">
+        <div class="input-group">
+          <label>Vos ingrédients disponibles</label>
+          <input type="text" id="recipe-ingredients" placeholder="Ex: poulet, courgettes, tomates, ail, citron..." class="text-input"/>
+        </div>
+        <div class="options-row">
+          <select id="recipe-type" class="select-input">
+            <option value="">Type de repas</option>
+            <option value="petit-déjeuner">Petit-déjeuner</option>
+            <option value="déjeuner">Déjeuner</option>
+            <option value="dîner">Dîner</option>
+            <option value="collation">Collation</option>
+          </select>
+          <select id="recipe-diet" class="select-input">
+            <option value="">Régime</option>
+            <option value="équilibré">Équilibré</option>
+            <option value="végétarien">Végétarien</option>
+            <option value="végétalien">Végétalien</option>
+            <option value="sans gluten">Sans gluten</option>
+            <option value="low-carb">Low-carb</option>
+          </select>
+        </div>
+        <button class="primary-btn" onclick="generateRecipes()">
+          <span>Générer des recettes</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div id="recipe-loading" class="loading-state hidden">
+        <div class="spinner"></div>
+        <p>Création de vos recettes...</p>
+      </div>
+      <div id="recipes-result" class="recipes-grid hidden"></div>
+    </section>
+
+    <!-- JOURNAL -->
+    <section id="page-journal" class="page">
+      <div class="page-title">
+        <h2>Journal des Repas</h2>
+        <p>Suivez votre alimentation quotidienne</p>
+      </div>
+
+      <div class="journal-date-nav">
+        <button onclick="changeJournalDate(-1)">‹</button>
+        <span id="journal-date-label"></span>
+        <button onclick="changeJournalDate(1)">›</button>
+      </div>
+
+      <div class="meal-sections">
+        <div class="meal-section">
+          <div class="meal-section-header">
+            <span>☀️ Petit-déjeuner</span>
+            <button class="add-meal-btn" onclick="openAddMeal('Petit-déjeuner')">+</button>
+          </div>
+          <div id="meal-breakfast" class="meal-list"></div>
+        </div>
+        <div class="meal-section">
+          <div class="meal-section-header">
+            <span>🌤 Déjeuner</span>
+            <button class="add-meal-btn" onclick="openAddMeal('Déjeuner')">+</button>
+          </div>
+          <div id="meal-lunch" class="meal-list"></div>
+        </div>
+        <div class="meal-section">
+          <div class="meal-section-header">
+            <span>🌙 Dîner</span>
+            <button class="add-meal-btn" onclick="openAddMeal('Dîner')">+</button>
+          </div>
+          <div id="meal-dinner" class="meal-list"></div>
+        </div>
+        <div class="meal-section">
+          <div class="meal-section-header">
+            <span>🍎 Collations</span>
+            <button class="add-meal-btn" onclick="openAddMeal('Collation')">+</button>
+          </div>
+          <div id="meal-snack" class="meal-list"></div>
+        </div>
+      </div>
+
+      <div class="journal-total card">
+        <span>Total du jour</span>
+        <span class="total-cal" id="journal-total-cal">0 kcal</span>
+      </div>
+    </section>
+
+    <!-- WEIGHT -->
+    <section id="page-weight" class="page">
+      <div class="page-title">
+        <h2>Suivi du Poids</h2>
+        <p>Visualisez votre progression vers votre objectif</p>
+      </div>
+
+      <div class="weight-input-card card">
+        <div class="input-row">
+          <div class="input-group flex-1">
+            <label>Poids actuel (kg)</label>
+            <input type="number" id="weight-input" placeholder="Ex: 72.5" step="0.1" class="text-input"/>
+          </div>
+          <div class="input-group flex-1">
+            <label>Poids objectif (kg)</label>
+            <input type="number" id="weight-goal-input" placeholder="Ex: 68" step="0.1" class="text-input"/>
+          </div>
+        </div>
+        <button class="primary-btn" onclick="saveWeight()">Enregistrer</button>
+      </div>
+
+      <div class="weight-stats-row">
+        <div class="weight-stat">
+          <span class="ws-value" id="ws-current">–</span>
+          <span class="ws-label">Poids actuel</span>
+        </div>
+        <div class="weight-stat accent-stat">
+          <span class="ws-value" id="ws-diff">–</span>
+          <span class="ws-label">Variation</span>
+        </div>
+        <div class="weight-stat">
+          <span class="ws-value" id="ws-goal">–</span>
+          <span class="ws-label">Objectif</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Historique du poids</h3>
+        <canvas id="weight-chart" height="200"></canvas>
+      </div>
+    </section>
+
+    <!-- SPORT -->
+    <section id="page-sport" class="page">
+      <div class="page-title">
+        <h2>Programme Sportif</h2>
+        <p>Activités adaptées à votre profil</p>
+      </div>
+
+      <div class="card">
+        <div class="options-row">
+          <select id="sport-level" class="select-input">
+            <option value="débutant">Débutant</option>
+            <option value="intermédiaire">Intermédiaire</option>
+            <option value="avancé">Avancé</option>
+          </select>
+          <select id="sport-goal" class="select-input">
+            <option value="perte de poids">Perte de poids</option>
+            <option value="muscle">Prise de muscle</option>
+            <option value="endurance">Endurance</option>
+            <option value="bien-être">Bien-être général</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Équipement disponible (optionnel)</label>
+          <input type="text" id="sport-equipment" placeholder="Ex: haltères, tapis, vélo..." class="text-input"/>
+        </div>
+        <button class="primary-btn" onclick="generateSportPlan()">
+          <span>Générer mon programme</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div id="sport-loading" class="loading-state hidden">
+        <div class="spinner"></div>
+        <p>Création de votre programme...</p>
+      </div>
+      <div id="sport-result" class="sport-result hidden"></div>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="page-profile" class="page">
+      <div class="page-title">
+        <h2>Mon Profil</h2>
+        <p>Gérez vos informations personnelles</p>
+      </div>
+      <div class="profile-card card">
+        <div class="profile-avatar-big" id="profile-avatar-big">S</div>
+        <div class="profile-info-grid">
+          <div class="input-group">
+            <label>Prénom</label>
+            <input type="text" id="profile-name" class="text-input" placeholder="Votre prénom"/>
+          </div>
+          <div class="input-group">
+            <label>Email</label>
+            <input type="email" id="profile-email" class="text-input" disabled/>
+          </div>
+          <div class="input-group">
+            <label>Âge</label>
+            <input type="number" id="profile-age" class="text-input" placeholder="Âge"/>
+          </div>
+          <div class="input-group">
+            <label>Genre</label>
+            <select id="profile-gender" class="select-input">
+              <option value="">Sélectionner</option>
+              <option value="homme">Homme</option>
+              <option value="femme">Femme</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Poids (kg)</label>
+            <input type="number" id="profile-weight" class="text-input" placeholder="Poids"/>
+          </div>
+          <div class="input-group">
+            <label>Taille (cm)</label>
+            <input type="number" id="profile-height" class="text-input" placeholder="Taille"/>
+          </div>
+          <div class="input-group">
+            <label>Objectif calorique journalier</label>
+            <input type="number" id="profile-cal-goal" class="text-input" placeholder="Ex: 2000"/>
+          </div>
+          <div class="input-group">
+            <label>Objectif de poids (kg)</label>
+            <input type="number" id="profile-weight-goal" class="text-input" placeholder="Objectif"/>
+          </div>
+        </div>
+        <button class="primary-btn" onclick="saveProfile()">Sauvegarder le profil</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ADD MEAL MODAL -->
+<div id="meal-modal" class="modal hidden">
+  <div class="modal-backdrop" onclick="closeMealModal()"></div>
+  <div class="modal-card">
+    <h3 id="modal-meal-type">Ajouter un repas</h3>
+    <div class="input-group">
+      <label>Description du repas</label>
+      <textarea id="modal-meal-desc" placeholder="Ex: 200g de saumon, riz, légumes..." rows="3"></textarea>
+    </div>
+    <input type="number" id="modal-meal-cal" placeholder="Calories (laisser vide pour estimer)" class="text-input"/>
+    <div class="modal-actions">
+      <button class="secondary-btn" onclick="closeMealModal()">Annuler</button>
+      <button class="primary-btn" onclick="addMealEntry()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast hidden"></div>
+
+<!-- Firebase SDKs -->
+<script type="module" src="app.js"></script>
+</body>
+</html>
