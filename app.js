@@ -576,7 +576,9 @@ window.setWater = function(val) {
   renderWater(); saveDailyData(); setDashboardStats();
 };
 function renderWater() {
-  document.getElementById('water-count').textContent = waterCount;
+  const liters = (waterCount * 0.25);
+  const formatted = liters % 1 === 0 ? liters : liters.toFixed(2);
+  document.getElementById('water-count').textContent = formatted + ' L';
   const btns = document.querySelectorAll('.glass-btn');
   btns.forEach((b, i) => {
     if (i < waterCount) b.classList.add('active'); else b.classList.remove('active');
