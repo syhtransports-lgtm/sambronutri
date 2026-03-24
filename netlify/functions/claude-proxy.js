@@ -1,7 +1,6 @@
 const https = require('https');
 
 exports.handler = async function(event, context) {
-  // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
@@ -18,12 +17,12 @@ exports.handler = async function(event, context) {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-  if (!GEMINI_API_KEY) {
+  const GROQ_API_KEY = process.env.GROQ_API_KEY;
+  if (!GROQ_API_KEY) {
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: 'GEMINI_API_KEY not configured on server.' })
+      body: JSON.stringify({ error: 'GROQ_API_KEY not configured on server.' })
     };
   }
 
@@ -38,24 +37,32 @@ exports.handler = async function(event, context) {
     };
   }
 
-  const systemPrompt = parsedBody.system || "";
-  const userMessage = parsedBody.messages?.[0]?.content || "";
-  const fullPrompt = systemPrompt ? `${systemPrompt}\n\n${userMessage}` : userMessage;
+  // Build Groq/OpenAI-compatible request
+  const messages = [];
+  if (parsedBody.system) {
+    messages.push({ role: 'system', content: parsedBody.system });
+  }
+  if (parsedBody.messages?.length) {
+    messages.push(...parsedBody.messages);
+  }
 
-  const geminiBody = JSON.stringify({
-    contents: [{ parts: [{ text: fullPrompt }] }],
-    generationConfig: { maxOutputTokens: 1500, temperature: 0.7 }
+  const groqBody = JSON.stringify({
+    model: 'llama-3.1-8b-instant',
+    messages,
+    max_tokens: 1500,
+    temperature: 0.7
   });
 
   try {
     const rawResponse = await new Promise((resolve, reject) => {
       const options = {
-        hostname: 'generativelanguage.googleapis.com',
-        path: `/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
+        hostname: 'api.groq.com',
+        path: '/openai/v1/chat/completions',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(geminiBody)
+          'Authorization': `Bearer ${GROQ_API_KEY}`,
+          'Content-Length': Buffer.byteLength(groqBody)
         }
       };
 
@@ -70,23 +77,23 @@ exports.handler = async function(event, context) {
         req.destroy();
         reject(new Error('Request timed out'));
       });
-      req.write(geminiBody);
+      req.write(groqBody);
       req.end();
     });
 
     const parsed = JSON.parse(rawResponse);
 
-    // Check for Gemini API error
     if (parsed.error) {
       return {
         statusCode: 500,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify({ error: parsed.error.message || 'Gemini API error', details: parsed.error })
+        body: JSON.stringify({ error: parsed.error.message || 'Groq API error' })
       };
     }
 
-    const text = parsed.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    const text = parsed.choices?.[0]?.message?.content || "";
 
+    // Return in format compatible with app.js (same as before)
     return {
       statusCode: 200,
       headers: {
