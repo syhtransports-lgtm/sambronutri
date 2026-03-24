@@ -26,8 +26,8 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
-// Anthropic API (via proxy / direct)
-const ANTHROPIC_API = "https://api.anthropic.com/v1/messages";
+// Anthropic API — routed via Netlify serverless proxy
+const ANTHROPIC_API = "/.netlify/functions/claude-proxy";
 
 // ===== STATE =====
 let currentUser = null;
@@ -217,7 +217,7 @@ window.showPage = function(page) {
 // ===== AI CALL =====
 async function callAI(prompt, systemPrompt = "") {
   const body = {
-    model: "claude-sonnet-4-20250514",
+    model: "claude-3-5-sonnet-20241022",
     max_tokens: 1500,
     messages: [{ role: "user", content: prompt }]
   };
