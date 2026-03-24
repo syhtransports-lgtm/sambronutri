@@ -21,12 +21,10 @@
       <h1>Sambro <em>Nutri</em></h1>
       <p>Votre compagnon nutrition & bien-être</p>
     </div>
-
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="showAuthTab('login')">Connexion</button>
       <button class="auth-tab" onclick="showAuthTab('register')">Inscription</button>
     </div>
-
     <div id="login-form" class="auth-form">
       <input type="email" id="login-email" placeholder="Adresse email" class="auth-input"/>
       <input type="password" id="login-password" placeholder="Mot de passe" class="auth-input"/>
@@ -37,7 +35,6 @@
         Continuer avec Google
       </button>
     </div>
-
     <div id="register-form" class="auth-form hidden">
       <input type="text" id="reg-name" placeholder="Votre prénom" class="auth-input"/>
       <input type="email" id="reg-email" placeholder="Adresse email" class="auth-input"/>
@@ -56,7 +53,6 @@
       </div>
       <button class="auth-btn" onclick="registerUser()">Créer mon compte</button>
     </div>
-
     <div id="auth-error" class="auth-error hidden"></div>
   </div>
 </div>
@@ -76,7 +72,7 @@
         Tableau de bord
       </button>
       <button class="nav-item" onclick="showPage('calories')" data-page="calories">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         Calories
       </button>
       <button class="nav-item" onclick="showPage('recipes')" data-page="recipes">
@@ -87,6 +83,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         Journal
       </button>
+      <button class="nav-item" onclick="showPage('planweek')" data-page="planweek">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Plan semaine
+      </button>
+      <button class="nav-item" onclick="showPage('chatbot')" data-page="chatbot">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Coach IA
+      </button>
       <button class="nav-item" onclick="showPage('weight')" data-page="weight">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         Poids
@@ -95,6 +99,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="5" r="2"/><path d="M12 7v8M8 9l4-2 4 2M9 17l3-2 3 2"/></svg>
         Sport
       </button>
+      <button class="nav-item" onclick="showPage('imc')" data-page="imc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/></svg>
+        IMC
+      </button>
       <button class="nav-item" onclick="showPage('profile')" data-page="profile">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Profil
@@ -102,7 +110,7 @@
     </div>
     <button class="logout-btn" onclick="logoutUser()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      Déconnexion
+      <span>Déconnexion</span>
     </button>
   </nav>
 
@@ -115,12 +123,11 @@
         <h2 id="greeting-text">Bonjour</h2>
         <span id="today-date"></span>
       </div>
-      <div class="header-user">
+      <div class="header-right">
+        <div class="streak-badge" id="streak-badge" title="Jours consécutifs">🔥 <span id="streak-count">0</span>j</div>
         <div class="user-avatar" id="user-avatar">S</div>
       </div>
     </header>
-
-    <!-- PAGES -->
 
     <!-- DASHBOARD -->
     <section id="page-dashboard" class="page active">
@@ -128,6 +135,7 @@
         <h2>Tableau de bord</h2>
         <p>Vue d'ensemble de votre journée</p>
       </div>
+
       <div class="stats-grid">
         <div class="stat-card accent">
           <div class="stat-icon">🔥</div>
@@ -144,7 +152,7 @@
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon">💧</div>
+          <div class="stat-icon">✨</div>
           <div class="stat-info">
             <span class="stat-value" id="dash-cal-remaining">2000</span>
             <span class="stat-label">kcal restantes</span>
@@ -159,6 +167,41 @@
         </div>
       </div>
 
+      <!-- Score santé + Streak + Eau -->
+      <div class="dash-mini-grid">
+        <div class="mini-card score-card">
+          <div class="score-ring">
+            <svg viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="34" fill="none" stroke="#e8f0eb" stroke-width="8"/>
+              <circle cx="40" cy="40" r="34" fill="none" stroke="#4d7a5e" stroke-width="8"
+                stroke-dasharray="213.6" id="score-circle" stroke-dashoffset="213.6"
+                stroke-linecap="round" transform="rotate(-90 40 40)"/>
+            </svg>
+            <span id="health-score">0</span>
+          </div>
+          <p>Score Santé</p>
+        </div>
+        <div class="mini-card water-card">
+          <div class="water-title">💧 Hydratation</div>
+          <div class="water-glasses" id="water-glasses">
+            <button class="glass-btn active" onclick="setWater(1)" title="1 verre">●</button>
+            <button class="glass-btn" onclick="setWater(2)" title="2 verres">●</button>
+            <button class="glass-btn" onclick="setWater(3)" title="3 verres">●</button>
+            <button class="glass-btn" onclick="setWater(4)" title="4 verres">●</button>
+            <button class="glass-btn" onclick="setWater(5)" title="5 verres">●</button>
+            <button class="glass-btn" onclick="setWater(6)" title="6 verres">●</button>
+            <button class="glass-btn" onclick="setWater(7)" title="7 verres">●</button>
+            <button class="glass-btn" onclick="setWater(8)" title="8 verres">●</button>
+          </div>
+          <div class="water-label"><span id="water-count">0</span> / 8 verres</div>
+        </div>
+        <div class="mini-card streak-card">
+          <div class="streak-num" id="dash-streak">0</div>
+          <div class="streak-label">🔥 Jours de suite</div>
+          <div class="streak-sub">Continuez comme ça !</div>
+        </div>
+      </div>
+
       <div class="progress-section">
         <div class="progress-label">
           <span>Progression calorique du jour</span>
@@ -167,6 +210,12 @@
         <div class="progress-bar-bg">
           <div class="progress-bar-fill" id="dash-progress-bar"></div>
         </div>
+      </div>
+
+      <!-- Graphique calories semaine -->
+      <div class="card">
+        <h3>Calories cette semaine</h3>
+        <canvas id="week-cal-chart" height="140"></canvas>
       </div>
 
       <div class="dash-grid">
@@ -205,7 +254,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </button>
       </div>
-
       <div id="cal-result" class="result-card hidden">
         <div class="result-header">
           <h3>Résultat d'analyse</h3>
@@ -213,6 +261,11 @@
         </div>
         <div id="cal-breakdown" class="cal-breakdown"></div>
         <div class="macro-grid" id="cal-macros"></div>
+        <!-- Graphique macros -->
+        <div class="macro-chart-wrap">
+          <canvas id="macro-pie-chart" width="160" height="160"></canvas>
+          <div id="macro-legend" class="macro-legend"></div>
+        </div>
         <button class="secondary-btn" onclick="addMealToJournal()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           Ajouter au journal
@@ -270,47 +323,97 @@
         <h2>Journal des Repas</h2>
         <p>Suivez votre alimentation quotidienne</p>
       </div>
-
       <div class="journal-date-nav">
         <button onclick="changeJournalDate(-1)">‹</button>
         <span id="journal-date-label"></span>
         <button onclick="changeJournalDate(1)">›</button>
       </div>
-
       <div class="meal-sections">
         <div class="meal-section">
-          <div class="meal-section-header">
-            <span>☀️ Petit-déjeuner</span>
-            <button class="add-meal-btn" onclick="openAddMeal('Petit-déjeuner')">+</button>
-          </div>
+          <div class="meal-section-header"><span>☀️ Petit-déjeuner</span><button class="add-meal-btn" onclick="openAddMeal('Petit-déjeuner')">+</button></div>
           <div id="meal-breakfast" class="meal-list"></div>
         </div>
         <div class="meal-section">
-          <div class="meal-section-header">
-            <span>🌤 Déjeuner</span>
-            <button class="add-meal-btn" onclick="openAddMeal('Déjeuner')">+</button>
-          </div>
+          <div class="meal-section-header"><span>🌤 Déjeuner</span><button class="add-meal-btn" onclick="openAddMeal('Déjeuner')">+</button></div>
           <div id="meal-lunch" class="meal-list"></div>
         </div>
         <div class="meal-section">
-          <div class="meal-section-header">
-            <span>🌙 Dîner</span>
-            <button class="add-meal-btn" onclick="openAddMeal('Dîner')">+</button>
-          </div>
+          <div class="meal-section-header"><span>🌙 Dîner</span><button class="add-meal-btn" onclick="openAddMeal('Dîner')">+</button></div>
           <div id="meal-dinner" class="meal-list"></div>
         </div>
         <div class="meal-section">
-          <div class="meal-section-header">
-            <span>🍎 Collations</span>
-            <button class="add-meal-btn" onclick="openAddMeal('Collation')">+</button>
-          </div>
+          <div class="meal-section-header"><span>🍎 Collations</span><button class="add-meal-btn" onclick="openAddMeal('Collation')">+</button></div>
           <div id="meal-snack" class="meal-list"></div>
         </div>
       </div>
-
       <div class="journal-total card">
         <span>Total du jour</span>
         <span class="total-cal" id="journal-total-cal">0 kcal</span>
+      </div>
+      <button class="secondary-btn" onclick="exportPDF()" style="margin-top:0.5rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Exporter le journal en PDF
+      </button>
+    </section>
+
+    <!-- PLAN SEMAINE -->
+    <section id="page-planweek" class="page">
+      <div class="page-title">
+        <h2>Plan Alimentaire Semaine</h2>
+        <p>Menu complet 7 jours généré par IA</p>
+      </div>
+      <div class="card">
+        <div class="options-row">
+          <select id="week-goal" class="select-input">
+            <option value="perte de poids">Perte de poids</option>
+            <option value="prise de masse">Prise de masse</option>
+            <option value="maintien et équilibre">Maintien & équilibre</option>
+            <option value="énergie et performance">Énergie & performance</option>
+          </select>
+          <select id="week-diet" class="select-input">
+            <option value="">Régime alimentaire</option>
+            <option value="équilibré">Équilibré</option>
+            <option value="végétarien">Végétarien</option>
+            <option value="sans gluten">Sans gluten</option>
+            <option value="low-carb">Low-carb</option>
+          </select>
+        </div>
+        <button class="primary-btn" onclick="generateWeekPlan()">
+          <span>Générer mon plan semaine</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <div id="week-loading" class="loading-state hidden">
+        <div class="spinner"></div>
+        <p>Création de votre plan sur 7 jours...</p>
+      </div>
+      <div id="week-result" class="hidden"></div>
+    </section>
+
+    <!-- COACH IA (CHATBOT) -->
+    <section id="page-chatbot" class="page">
+      <div class="page-title">
+        <h2>Coach Nutrition IA</h2>
+        <p>Posez vos questions à votre coach personnel</p>
+      </div>
+      <div class="chatbot-container">
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-msg assistant">
+            <div class="chat-avatar">🌿</div>
+            <div class="chat-bubble">Bonjour ! Je suis votre coach nutrition. Posez-moi n'importe quelle question sur votre alimentation, vos recettes, votre poids ou votre santé. Je suis là pour vous aider ! 💪</div>
+          </div>
+        </div>
+        <div class="chat-suggestions">
+          <button class="suggest-btn" onclick="sendSuggestion(this)">Que manger ce soir ?</button>
+          <button class="suggest-btn" onclick="sendSuggestion(this)">Aliments riches en protéines ?</button>
+          <button class="suggest-btn" onclick="sendSuggestion(this)">Comment perdre du poids sainement ?</button>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="chat-input" class="text-input" placeholder="Posez votre question..." onkeydown="if(event.key==='Enter') sendChat()"/>
+          <button class="chat-send-btn" onclick="sendChat()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -320,7 +423,6 @@
         <h2>Suivi du Poids</h2>
         <p>Visualisez votre progression vers votre objectif</p>
       </div>
-
       <div class="weight-input-card card">
         <div class="input-row">
           <div class="input-group flex-1">
@@ -334,25 +436,24 @@
         </div>
         <button class="primary-btn" onclick="saveWeight()">Enregistrer</button>
       </div>
-
       <div class="weight-stats-row">
-        <div class="weight-stat">
-          <span class="ws-value" id="ws-current">–</span>
-          <span class="ws-label">Poids actuel</span>
-        </div>
-        <div class="weight-stat accent-stat">
-          <span class="ws-value" id="ws-diff">–</span>
-          <span class="ws-label">Variation</span>
-        </div>
-        <div class="weight-stat">
-          <span class="ws-value" id="ws-goal">–</span>
-          <span class="ws-label">Objectif</span>
-        </div>
+        <div class="weight-stat"><span class="ws-value" id="ws-current">–</span><span class="ws-label">Poids actuel</span></div>
+        <div class="weight-stat accent-stat"><span class="ws-value" id="ws-diff">–</span><span class="ws-label">Variation</span></div>
+        <div class="weight-stat"><span class="ws-value" id="ws-goal">–</span><span class="ws-label">Objectif</span></div>
       </div>
-
       <div class="card">
         <h3>Historique du poids</h3>
         <canvas id="weight-chart" height="200"></canvas>
+      </div>
+      <!-- Analyse IA habitudes -->
+      <div class="card">
+        <h3>Analyse IA de vos habitudes</h3>
+        <button class="primary-btn" onclick="analyzeHabits()">
+          <span>Analyser mes habitudes</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/></svg>
+        </button>
+        <div id="habits-loading" class="loading-state hidden"><div class="spinner"></div><p>Analyse en cours...</p></div>
+        <div id="habits-result" class="hidden" style="margin-top:1rem;"></div>
       </div>
     </section>
 
@@ -362,7 +463,6 @@
         <h2>Programme Sportif</h2>
         <p>Activités adaptées à votre profil</p>
       </div>
-
       <div class="card">
         <div class="options-row">
           <select id="sport-level" class="select-input">
@@ -386,11 +486,48 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </button>
       </div>
-      <div id="sport-loading" class="loading-state hidden">
-        <div class="spinner"></div>
-        <p>Création de votre programme...</p>
-      </div>
+      <div id="sport-loading" class="loading-state hidden"><div class="spinner"></div><p>Création de votre programme...</p></div>
       <div id="sport-result" class="sport-result hidden"></div>
+    </section>
+
+    <!-- IMC -->
+    <section id="page-imc" class="page">
+      <div class="page-title">
+        <h2>Calculateur IMC</h2>
+        <p>Indice de Masse Corporelle et recommandations personnalisées</p>
+      </div>
+      <div class="card">
+        <div class="input-row">
+          <div class="input-group flex-1">
+            <label>Poids (kg)</label>
+            <input type="number" id="imc-weight" class="text-input" placeholder="Ex: 72"/>
+          </div>
+          <div class="input-group flex-1">
+            <label>Taille (cm)</label>
+            <input type="number" id="imc-height" class="text-input" placeholder="Ex: 175"/>
+          </div>
+        </div>
+        <button class="primary-btn" onclick="calculateIMC()">Calculer mon IMC</button>
+      </div>
+      <div id="imc-result" class="hidden">
+        <div class="imc-display card">
+          <div class="imc-value-wrap">
+            <span class="imc-value" id="imc-value">—</span>
+            <span class="imc-label" id="imc-label">—</span>
+          </div>
+          <div class="imc-bar-wrap">
+            <div class="imc-bar">
+              <div class="imc-bar-seg seg-1"></div>
+              <div class="imc-bar-seg seg-2"></div>
+              <div class="imc-bar-seg seg-3"></div>
+              <div class="imc-bar-seg seg-4"></div>
+              <div class="imc-indicator" id="imc-indicator"></div>
+            </div>
+            <div class="imc-bar-labels"><span>Maigreur</span><span>Normal</span><span>Surpoids</span><span>Obésité</span></div>
+          </div>
+          <div class="imc-advice" id="imc-advice"></div>
+        </div>
+      </div>
     </section>
 
     <!-- PROFILE -->
@@ -402,42 +539,20 @@
       <div class="profile-card card">
         <div class="profile-avatar-big" id="profile-avatar-big">S</div>
         <div class="profile-info-grid">
-          <div class="input-group">
-            <label>Prénom</label>
-            <input type="text" id="profile-name" class="text-input" placeholder="Votre prénom"/>
-          </div>
-          <div class="input-group">
-            <label>Email</label>
-            <input type="email" id="profile-email" class="text-input" disabled/>
-          </div>
-          <div class="input-group">
-            <label>Âge</label>
-            <input type="number" id="profile-age" class="text-input" placeholder="Âge"/>
-          </div>
-          <div class="input-group">
-            <label>Genre</label>
+          <div class="input-group"><label>Prénom</label><input type="text" id="profile-name" class="text-input" placeholder="Votre prénom"/></div>
+          <div class="input-group"><label>Email</label><input type="email" id="profile-email" class="text-input" disabled/></div>
+          <div class="input-group"><label>Âge</label><input type="number" id="profile-age" class="text-input" placeholder="Âge"/></div>
+          <div class="input-group"><label>Genre</label>
             <select id="profile-gender" class="select-input">
               <option value="">Sélectionner</option>
               <option value="homme">Homme</option>
               <option value="femme">Femme</option>
             </select>
           </div>
-          <div class="input-group">
-            <label>Poids (kg)</label>
-            <input type="number" id="profile-weight" class="text-input" placeholder="Poids"/>
-          </div>
-          <div class="input-group">
-            <label>Taille (cm)</label>
-            <input type="number" id="profile-height" class="text-input" placeholder="Taille"/>
-          </div>
-          <div class="input-group">
-            <label>Objectif calorique journalier</label>
-            <input type="number" id="profile-cal-goal" class="text-input" placeholder="Ex: 2000"/>
-          </div>
-          <div class="input-group">
-            <label>Objectif de poids (kg)</label>
-            <input type="number" id="profile-weight-goal" class="text-input" placeholder="Objectif"/>
-          </div>
+          <div class="input-group"><label>Poids (kg)</label><input type="number" id="profile-weight" class="text-input" placeholder="Poids"/></div>
+          <div class="input-group"><label>Taille (cm)</label><input type="number" id="profile-height" class="text-input" placeholder="Taille"/></div>
+          <div class="input-group"><label>Objectif calorique journalier</label><input type="number" id="profile-cal-goal" class="text-input" placeholder="Ex: 2000"/></div>
+          <div class="input-group"><label>Objectif de poids (kg)</label><input type="number" id="profile-weight-goal" class="text-input" placeholder="Objectif"/></div>
         </div>
         <button class="primary-btn" onclick="saveProfile()">Sauvegarder le profil</button>
       </div>
@@ -466,7 +581,6 @@
 <!-- TOAST -->
 <div id="toast" class="toast hidden"></div>
 
-<!-- Firebase SDKs -->
 <script type="module" src="app.js"></script>
 </body>
 </html>
