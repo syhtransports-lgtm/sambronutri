@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
@@ -565,15 +566,31 @@
 <div id="meal-modal" class="modal hidden">
   <div class="modal-backdrop" onclick="closeMealModal()"></div>
   <div class="modal-card">
-    <h3 id="modal-meal-type">Ajouter un repas</h3>
+    <h3 id="modal-meal-type-title">Ajouter un repas</h3>
+    <div class="input-group">
+      <label>Date</label>
+      <input type="date" id="modal-meal-date" class="text-input"/>
+    </div>
+    <div class="input-group">
+      <label>Type de repas</label>
+      <select id="modal-meal-type" class="select-input">
+        <option value="Petit-déjeuner">Petit-déjeuner</option>
+        <option value="Déjeuner">Déjeuner</option>
+        <option value="Dîner">Dîner</option>
+        <option value="Collation">Collation</option>
+      </select>
+    </div>
     <div class="input-group">
       <label>Description du repas</label>
       <textarea id="modal-meal-desc" placeholder="Ex: 200g de saumon, riz, légumes..." rows="3"></textarea>
     </div>
-    <input type="number" id="modal-meal-cal" placeholder="Calories (laisser vide pour estimer)" class="text-input"/>
+    <div class="input-group">
+      <label>Calories</label>
+      <input type="number" id="modal-meal-cal" placeholder="(laisser vide pour estimer)" class="text-input"/>
+    </div>
     <div class="modal-actions">
       <button class="secondary-btn" onclick="closeMealModal()">Annuler</button>
-      <button class="primary-btn" onclick="addMealEntry()">Ajouter</button>
+      <button class="primary-btn" onclick="addMealEntry()">Ajouter au journal</button>
     </div>
   </div>
 </div>
