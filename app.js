@@ -228,8 +228,23 @@ async function callAI(prompt, systemPrompt = "") {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body)
   });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    console.error("Proxy error:", response.status, errText);
+    throw new Error(`Proxy HTTP ${response.status}: ${errText}`);
+  }
+
   const data = await response.json();
-  return data.content?.[0]?.text || "";
+
+  if (data.error) {
+    console.error("AI API error:", data.error);
+    throw new Error(data.error);
+  }
+
+  const text = data.content?.[0]?.text || "";
+  if (!text) throw new Error("Réponse vide de l'IA.");
+  return text;
 }
 
 // ===== CALORIES =====
