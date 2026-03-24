@@ -277,6 +277,16 @@ window.estimateCalories = async function() {
 
     const clean = response.replace(/```json|```/g, '').trim();
     const data = JSON.parse(clean);
+    
+    // Fix AI arithmetic problems: sum explicitly from items
+    let actualTotal = 0;
+    if (data.items && data.items.length > 0) {
+      actualTotal = data.items.reduce((sum, item) => sum + (Number(item.calories) || 0), 0);
+    } else {
+      actualTotal = data.total_calories || 0;
+    }
+    data.total_calories = actualTotal;
+
     lastCalResult = { description: desc, calories: data.total_calories, data };
 
     document.getElementById('cal-total-badge').textContent = `${data.total_calories} kcal`;
