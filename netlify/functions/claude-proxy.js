@@ -1,3 +1,5 @@
+const https = require('https');
+
 exports.handler = async function(event, context) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -7,36 +9,52 @@ exports.handler = async function(event, context) {
   if (!GEMINI_API_KEY) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'API key not configured on server.' })
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify({ error: 'GEMINI_API_KEY not configured.' })
     };
   }
 
   try {
     const body = JSON.parse(event.body);
-
-    // Convert Anthropic-style request to Gemini format
     const systemPrompt = body.system || "";
     const userMessage = body.messages?.[0]?.content || "";
     const fullPrompt = systemPrompt ? `${systemPrompt}\n\n${userMessage}` : userMessage;
 
-    const geminiBody = {
+    const geminiBody = JSON.stringify({
       contents: [{ parts: [{ text: fullPrompt }] }],
       generationConfig: { maxOutputTokens: 1500, temperature: 0.7 }
-    };
+    });
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-      {
+    const text = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'generativelanguage.googleapis.com',
+        path: `/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(geminiBody)
-      }
-    );
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(geminiBody)
+        }
+      };
 
-    const data = await response.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      const req = https.request(options, (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => {
+          try {
+            const parsed = JSON.parse(data);
+            const txt = parsed.candidates?.[0]?.content?.parts?.[0]?.text || "";
+            resolve(txt);
+          } catch (e) {
+            reject(new Error('JSON parse error: ' + data));
+          }
+        });
+      });
 
-    // Return in Anthropic-compatible format so app.js doesn't need changes
+      req.on('error', reject);
+      req.write(geminiBody);
+      req.end();
+    });
+
     return {
       statusCode: 200,
       headers: {
@@ -45,9 +63,11 @@ exports.handler = async function(event, context) {
       },
       body: JSON.stringify({ content: [{ text }] })
     };
+
   } catch (err) {
     return {
       statusCode: 500,
+      headers: { 'Access-Control-Allow-Origin': '*' },
       body: JSON.stringify({ error: err.message })
     };
   }
